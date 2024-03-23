@@ -1,24 +1,139 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'guard/auth.dart';
+import 'view/screens/auth/setting.dart';
+import 'view/screens/layout/scaffhold.dart';
+import 'view/screens/public/home.dart';
+import 'view/screens/public/login.dart';
+import 'view/widgets/fade_transition_page.dart';
 
-import 'utils/colors.dart';
-import 'view/screens/home_screen.dart';
+const double windowWidth = 480;
+const double windowHeight = 854;
 
-void main() {
-  runApp(const MyApp());
-}
+// void setupWindow() {
+//   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+//     WidgetsFlutterBinding.ensureInitialized();
+//     setWindowTitle('Navigation and routing');
+//     setWindowMinSize(const Size(windowWidth, windowHeight));
+//     setWindowMaxSize(const Size(windowWidth, windowHeight));
+//     getCurrentScreen().then((screen) {
+//       setWindowFrame(Rect.fromCenter(
+//         center: screen!.frame.center,
+//         width: windowWidth,
+//         height: windowHeight,
+//       ));
+//     });
+//   }
+// }
+
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Dashboard Template UI',
-      theme: ThemeData.dark(useMaterial3: true).copyWith(
-        scaffoldBackgroundColor: darkBlack,
-      ),
-      home: const HomeScreen(),
-    );
+    // setupWindow();
+    return MaterialApp.router(
+        builder: (context, child) {
+          if (child == null) {
+            throw ('No child in .router constructor builder');
+          }
+          return AuthScope(
+            notifier: Auth(),
+            child: child,
+          );
+        },
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        title: 'Shared preferences demo',
+        // theme: ThemeData(
+        //     colorScheme: ColorScheme.fromSeed(
+        //   // brightness: MediaQuery.platformBrightnessOf(context),
+        //   seedColor: Colors.pinkAccent,
+        // )),
+        routerConfig: GoRouter(
+          refreshListenable: Auth(),
+          debugLogDiagnostics: true,
+          initialLocation: '/dashborad',
+          redirect: (context, state) {
+            final signedIn = Auth.of(context).signedIn;
+            print(signedIn);
+            if (state.uri.toString() != '/login' && !signedIn) {
+              print("err");
+              return '/login';
+            }
+            return null;
+          },
+          routes: <RouteBase>[
+            GoRoute(
+              path: '/',
+              redirect: (context, state) {
+                final signedIn = Auth.of(context).signedIn;
+                if (state.uri.toString() != '/login' && !signedIn) {
+                  return '/login';
+                }
+                return null;
+              },
+              routes: <RouteBase>[
+                ShellRoute(
+                  builder: (context, state, child) {
+                    return BasicScaffold(
+                      selectedIndex: switch (state.uri.path) {
+                        // var p when p.startsWith('/books') => 0,
+                        var p when p.startsWith('/dashboard') => 0,
+                        var p when p.startsWith('/settings') => 1,
+                        _ => 0,
+                      },
+                      child: child,
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'dashboard',
+                      pageBuilder: (context, state) {
+                        return FadeTransitionPage<dynamic>(
+                          key: state.pageKey,
+                          child: const MyHomePageScreen(
+                            title: 'Home Page',
+                          ),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: 'settings',
+                      pageBuilder: (context, state) {
+                        return FadeTransitionPage<dynamic>(
+                          key: state.pageKey,
+                          child: const SettingsScreen(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  path: 'login',
+                  builder: (context, state) {
+                    // Use a builder to get the correct BuildContext
+                    return Builder(
+                      builder: (context) {
+                        return SignInScreen(
+                          onSignIn: (value) async {
+                            final router = GoRouter.of(context);
+                            await Auth.of(context)
+                                .signIn(value.username, value.password);
+                            print("4");
+                            router.go('/dashboard');
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ));
   }
 }
