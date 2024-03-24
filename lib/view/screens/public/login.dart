@@ -14,11 +14,10 @@ class Credentials {
 //   'hunter@gmail.com': 'hunter',
 // };
 class SignInScreen extends StatefulWidget {
-  final ValueChanged<Credentials> onSignIn;
+  var onSignIn;
+  SignInScreen({required this.onSignIn, super.key});
 
-  const SignInScreen({required this.onSignIn, super.key});
-
-  static const routeName = '/dashboard';
+  static const routeName = '/login';
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
@@ -106,7 +105,7 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ],
       onSubmitAnimationCompleted: () {
-        Credentials(user.name, user.password);
+        widget.onSignIn(Credentials(user.name, user.password), context);
         // Navigator.of(context).pushReplacement(
         //   FadePageRoute(
         //     builder: (context) => const MyHomePageScreen(

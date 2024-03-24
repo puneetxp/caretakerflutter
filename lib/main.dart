@@ -119,11 +119,10 @@ class MyApp extends StatelessWidget {
                     return Builder(
                       builder: (context) {
                         return SignInScreen(
-                          onSignIn: (value) async {
+                          onSignIn: (Credentials value, context) async {
                             final router = GoRouter.of(context);
                             await Auth.of(context)
                                 .signIn(value.username, value.password);
-                            print("4");
                             router.go('/dashboard');
                           },
                         );
