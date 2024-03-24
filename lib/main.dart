@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'guard/auth.dart';
-import 'view/screens/auth/setting.dart';
 import 'view/screens/layout/scaffhold.dart';
 import 'view/screens/public/home.dart';
 import 'view/screens/public/login.dart';
+import 'view/screens/auth/setting.dart';
 import 'view/widgets/fade_transition_page.dart';
 
 const double windowWidth = 480;
@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
           if (child == null) {
             throw ('No child in .router constructor builder');
           }
-          return AuthScope(
-            notifier: Auth(),
+          return AuthGuardScope(
+            notifier: AuthGuard(),
             child: child,
           );
         },
@@ -54,14 +54,12 @@ class MyApp extends StatelessWidget {
         //   seedColor: Colors.pinkAccent,
         // )),
         routerConfig: GoRouter(
-          refreshListenable: Auth(),
+          refreshListenable: AuthGuard(),
           debugLogDiagnostics: true,
           initialLocation: '/dashborad',
           redirect: (context, state) {
-            final signedIn = Auth.of(context).signedIn;
-            print(signedIn);
+            final signedIn = AuthGuard.of(context).signedIn;
             if (state.uri.toString() != '/login' && !signedIn) {
-              print("err");
               return '/login';
             }
             return null;
@@ -70,7 +68,7 @@ class MyApp extends StatelessWidget {
             GoRoute(
               path: '/',
               redirect: (context, state) {
-                final signedIn = Auth.of(context).signedIn;
+                final signedIn = AuthGuard.of(context).signedIn;
                 if (state.uri.toString() != '/login' && !signedIn) {
                   return '/login';
                 }
@@ -96,7 +94,7 @@ class MyApp extends StatelessWidget {
                         return FadeTransitionPage<dynamic>(
                           key: state.pageKey,
                           child: const MyHomePageScreen(
-                            title: 'Home Page',
+                            title: 'Dashboard',
                           ),
                         );
                       },
@@ -119,9 +117,10 @@ class MyApp extends StatelessWidget {
                     return Builder(
                       builder: (context) {
                         return SignInScreen(
-                          onSignIn: (Credentials value, context) async {
+                          onSignIn:
+                              (Credentials value, BuildContext context) async {
                             final router = GoRouter.of(context);
-                            await Auth.of(context)
+                            await AuthGuard.of(context)
                                 .signIn(value.username, value.password);
                             router.go('/dashboard');
                           },

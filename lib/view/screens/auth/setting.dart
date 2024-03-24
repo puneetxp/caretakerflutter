@@ -52,7 +52,7 @@ class SettingsContent extends StatelessWidget {
             ),
             FilledButton(
               onPressed: () {
-                Auth.of(context).signOut();
+                AuthGuard.of(context).signOut();
               },
               child: const Text('Sign out'),
             ),

@@ -9,6 +9,11 @@ class Credentials {
   Credentials(this.username, this.password);
 }
 
+// interface class Interface {
+//   onSignIn(Credentials value, BuildContext context) async {}
+//   void moveForward(Credentials credentials, BuildContext context) {}
+// }
+
 // const users = {
 //   'dribbble@gmail.com': '12345',
 //   'hunter@gmail.com': 'hunter',
@@ -84,25 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
             debugPrint('stop facebook sign in');
             return null;
           },
-        ),
-        LoginProvider(
-          icon: FontAwesomeIcons.linkedinIn,
-          callback: () async {
-            debugPrint('start linkdin sign in');
-            await Future.delayed(loginTime);
-            debugPrint('stop linkdin sign in');
-            return null;
-          },
-        ),
-        LoginProvider(
-          icon: FontAwesomeIcons.githubAlt,
-          callback: () async {
-            debugPrint('start github sign in');
-            await Future.delayed(loginTime);
-            debugPrint('stop github sign in');
-            return null;
-          },
-        ),
+        )
       ],
       onSubmitAnimationCompleted: () {
         widget.onSignIn(Credentials(user.name, user.password), context);

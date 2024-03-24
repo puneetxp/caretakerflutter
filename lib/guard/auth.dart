@@ -5,7 +5,7 @@
 import 'package:flutter/widgets.dart';
 
 /// A mock authentication service
-class Auth extends ChangeNotifier {
+class AuthGuard extends ChangeNotifier {
   bool _signedIn = false;
 
   bool get signedIn => _signedIn;
@@ -28,17 +28,17 @@ class Auth extends ChangeNotifier {
 
   @override
   bool operator ==(Object other) =>
-      other is Auth && other._signedIn == _signedIn;
+      other is AuthGuard && other._signedIn == _signedIn;
 
   @override
   int get hashCode => _signedIn.hashCode;
 
-  static Auth of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<AuthScope>()!.notifier!;
+  static AuthGuard of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<AuthGuardScope>()!.notifier!;
 }
 
-class AuthScope extends InheritedNotifier<Auth> {
-  const AuthScope({
+class AuthGuardScope extends InheritedNotifier<AuthGuard> {
+  const AuthGuardScope({
     required super.notifier,
     required super.child,
     super.key,
