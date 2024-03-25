@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MyHomePageScreen extends StatefulWidget {
-  const MyHomePageScreen({super.key, required this.title});
+class DashboardPageScreen extends StatefulWidget {
+  const DashboardPageScreen({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePageScreen> createState() => _MyHomePageScreenState();
+  State<DashboardPageScreen> createState() => _DashboardPageScreenState();
 }
 
-class _MyHomePageScreenState extends State<MyHomePageScreen> {
+class _DashboardPageScreenState extends State<DashboardPageScreen> {
   int _counter = 0;
 
   @override
@@ -70,7 +70,7 @@ class _MyHomePageScreenState extends State<MyHomePageScreen> {
       ),
       body: const Center(
         child: Text(
-          'This is the home page',
+          'This is the Dashoboard',
           style: TextStyle(fontSize: 24),
         ),
       ),

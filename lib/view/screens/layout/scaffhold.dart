@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class BasicScaffold extends StatelessWidget {
+  final AppBar appbar;
   final Widget child;
   final int selectedIndex;
 
   const BasicScaffold({
+    required this.appbar,
     required this.child,
     required this.selectedIndex,
     super.key,
@@ -21,6 +23,7 @@ class BasicScaffold extends StatelessWidget {
     final goRouter = GoRouter.of(context);
 
     return Scaffold(
+      appBar: appbar,
       body: AdaptiveNavigationScaffold(
         selectedIndex: selectedIndex,
         body: child,
@@ -45,5 +48,23 @@ class BasicScaffold extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class GuestScaffold extends StatelessWidget {
+  final AppBar appbar;
+  final Widget child;
+
+  const GuestScaffold({
+    super.key,
+    required this.appbar,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final goRouter = GoRouter.of(context);
+
+    return Scaffold(appBar: appbar, body: child);
   }
 }

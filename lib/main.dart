@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'guard/auth.dart';
+import 'view/screens/auth/dashboard.dart';
 import 'view/screens/layout/scaffhold.dart';
 import 'view/screens/public/home.dart';
 import 'view/screens/public/login.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // setupWindow();
     return MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         builder: (context, child) {
           if (child == null) {
             throw ('No child in .router constructor builder');
@@ -56,19 +58,54 @@ class MyApp extends StatelessWidget {
         routerConfig: GoRouter(
           refreshListenable: AuthGuard(),
           debugLogDiagnostics: true,
-          initialLocation: '/dashborad',
-          redirect: (context, state) {
-            final signedIn = AuthGuard.of(context).signedIn;
-            if (state.uri.toString() != '/login' && !signedIn) {
-              return '/login';
-            }
-            return null;
-          },
+          initialLocation: '/',
           routes: <RouteBase>[
+            ShellRoute(
+                builder:
+                    (BuildContext context, GoRouterState state, Widget child) {
+                  final signedIn = AuthGuard.of(context).signedIn;
+                  return GuestScaffold(
+                    appbar: AppBar(
+                      title: const Text('Care'),
+                      backgroundColor: Colors.purpleAccent,
+                      foregroundColor: Colors.white,
+                      actions: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.person),
+                          tooltip: signedIn ? "Login" : "Dashboard",
+                          onPressed: () {
+                            signedIn
+                                ? GoRouter.of(context).go('/dashboard')
+                                : GoRouter.of(context).go('/login');
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(content: Text('This is a snackbar')));
+                          },
+                        )
+                      ],
+                    ),
+                    child: child,
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    path: '/',
+                    pageBuilder: (context, state) {
+                      return FadeTransitionPage<dynamic>(
+                        key: state.pageKey,
+                        child: const MyHomePageScreen(
+                          title: 'Home Page',
+                        ),
+                      );
+                    },
+                  ),
+                ]),
             GoRoute(
               path: '/',
               redirect: (context, state) {
                 final signedIn = AuthGuard.of(context).signedIn;
+                if (signedIn) {
+                  return null;
+                }
                 if (state.uri.toString() != '/login' && !signedIn) {
                   return '/login';
                 }
@@ -77,7 +114,26 @@ class MyApp extends StatelessWidget {
               routes: <RouteBase>[
                 ShellRoute(
                   builder: (context, state, child) {
+                    final signedIn = AuthGuard.of(context).signedIn;
                     return BasicScaffold(
+                      appbar: AppBar(
+                        title: const Text('Care'),
+                        backgroundColor: Colors.purpleAccent,
+                        foregroundColor: Colors.white,
+                        actions: <Widget>[
+                          IconButton(
+                            icon: const Icon(Icons.person),
+                            tooltip: signedIn ? "Login" : "Dashboard",
+                            onPressed: () {
+                              signedIn
+                                  ? GoRouter.of(context).go('/dashboard')
+                                  : GoRouter.of(context).go('/login');
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //     const SnackBar(content: Text('This is a snackbar')));
+                            },
+                          )
+                        ],
+                      ),
                       selectedIndex: switch (state.uri.path) {
                         // var p when p.startsWith('/books') => 0,
                         var p when p.startsWith('/dashboard') => 0,
@@ -93,7 +149,7 @@ class MyApp extends StatelessWidget {
                       pageBuilder: (context, state) {
                         return FadeTransitionPage<dynamic>(
                           key: state.pageKey,
-                          child: const MyHomePageScreen(
+                          child: const DashboardPageScreen(
                             title: 'Dashboard',
                           ),
                         );
