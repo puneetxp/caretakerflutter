@@ -73,8 +73,8 @@ class _SignInScreenState extends State<SignInScreen> {
         // primaryColor: Colors.teal,
         // accentColor: Colors.yellow,
         // errorColor: Colors.deepOrange,
-        pageColorLight: Colors.purpleAccent,
-        pageColorDark: Colors.purpleAccent,
+        pageColorLight: Colors.green,
+        pageColorDark: Colors.green,
         // logoWidth: 0.80,
         // titleStyle: TextStyle(
         //   color: Colors.greenAccent,

@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           );
         },
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
         ),
         title: 'Shared preferences demo',
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
                   return GuestScaffold(
                     appbar: AppBar(
                       title: const Text('Care'),
-                      backgroundColor: Colors.purpleAccent,
+                      backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
                       actions: <Widget>[
                         IconButton(
@@ -118,12 +118,12 @@ class MyApp extends StatelessWidget {
                     return BasicScaffold(
                       appbar: AppBar(
                         title: const Text('Care'),
-                        backgroundColor: Colors.purpleAccent,
+                        backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                         actions: <Widget>[
                           IconButton(
                             icon: const Icon(Icons.person),
-                            tooltip: signedIn ? "Login" : "Dashboard",
+                            tooltip: signedIn ? "Dashboard" : "Login",
                             onPressed: () {
                               signedIn
                                   ? GoRouter.of(context).go('/dashboard')

@@ -49,25 +49,25 @@ class _DashboardPageScreenState extends State<DashboardPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AppBar Demo'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add_alert),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              GoRouter.of(context).go('/login');
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //     const SnackBar(content: Text('This is a snackbar')));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.navigate_next),
-            tooltip: 'Go to the next page',
-            onPressed: () {},
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: const Text('AppBar Demo'),
+      //   actions: <Widget>[
+      //     IconButton(
+      //       icon: const Icon(Icons.add_alert),
+      //       tooltip: 'Show Snackbar',
+      //       onPressed: () {
+      //         GoRouter.of(context).go('/login');
+      //         // ScaffoldMessenger.of(context).showSnackBar(
+      //         //     const SnackBar(content: Text('This is a snackbar')));
+      //       },
+      //     ),
+      //     IconButton(
+      //       icon: const Icon(Icons.navigate_next),
+      //       tooltip: 'Go to the next page',
+      //       onPressed: () {},
+      //     ),
+      //   ],
+      // ),
       body: const Center(
         child: Text(
           'This is the Dashoboard',
